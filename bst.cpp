@@ -12,9 +12,37 @@ class TreeNode{
         TreeNode *rightPointer=NULL;
         TreeNode *parentPointer=NULL;
         int keyValue;
-        TreeNode();
+        TreeNode(){}
 };
-    
+
+void makeTree(int *postA, TreeNode *rootpointer){
+    TreeNode root;
+    int sizeOfPostA = sizeof(postA);
+    root.keyValue=postA[sizeOfPostA-1];
+    if(sizeOfPostA==1){
+        return;
+    }
+    int k=sizeOfPostA-1;
+        while(postA[k]>postA[sizeOfPostA-1]){
+            k--;
+        }
+        int *rightTreeNodes, *leftTreeNodes;
+        copy(postA+k+1,postA+sizeOfPostA-1,rightTreeNodes);
+        copy(postA, postA+k, leftTreeNodes);
+    makeTree(rightTreeNodes, root.rightPointer);
+    makeTree(leftTreeNodes, root.leftPointer);
+    *rootpointer = root;
+}
+void printPreorderTree(TreeNode root, vector<int>& preT){
+    preT.push_back(root.keyValue);
+    if(root.leftPointer!=NULL){
+        printPreorderTree(*root.leftPointer, preT);
+    }
+    if(root.rightPointer!=NULL){
+        printPreorderTree(*root.rightPointer, preT);
+    }
+    return;
+}    
 
 int main(int argc, char *argv[]){
     ifstream infile; 
@@ -26,71 +54,40 @@ int main(int argc, char *argv[]){
     int treeNum=0;
     infile>>treeNum;
     int **postTree=NULL;
+    int **preTree=NULL;
     int **inorderTree=NULL;
     postTree = new int * [treeNum]; 
+    preTree = new int * [treeNum]; 
     inorderTree = new int * [treeNum];
-    TreeNode **bst_tree;
-    bst_tree = new TreeNode * [treeNum];
+    TreeNode *binaryTree[treeNum];
+    //TreeNode **bst_tree;
+    //bst_tree = new TreeNode * [treeNum];
 
     int nodeNum[treeNum];
     for(int i=0; i<treeNum; i++){
         infile>>nodeNum[i];
         postTree[i] = new int[nodeNum[i]];
+        preTree[i] = new int[nodeNum[i]];
         inorderTree[i] = new int[nodeNum[i]];
-        bst_tree[i] = new TreeNode[nodeNum[i]];
+        //bst_tree[i] = new TreeNode[nodeNum[i]];
         for(int j=0; j<nodeNum[i]; j++){
             infile>>postTree[i][j];
             inorderTree[i][j]=postTree[i][j];
         }
         sort(inorderTree[i],inorderTree[i]+nodeNum[i]);
     }
-
     for(int i=0; i<treeNum; i++){
-        // for (int j=0; j<nodeNum[i]-2; j++){
-        //     int key1=bst_tree[i][j].keyValue;
-        //     int key2=bst_tree[i][j+1].keyValue;
-        //     int key3=bst_tree[i][j+2].keyValue;
-        //     // TreeNode *lefttree=NULL;
-        //     if(key1<key2 && key2<key3){
-        //         // bst_tree[i][j+1].parentPointer=bst_tree[i][j+2];
-        //         // bst_tree[i][j+2].leftPointer=bst_tree[i][j+1];
-        //         //key1 useless
-        //     }else if (key1<key3 && key3<key2){
-        //         bst_tree[i][j].parentPointer=bst_tree[i][j+2];
-        //         bst_tree[i][j+2].leftPointer=bst_tree[i][j];
-        //         bst_tree[i][j+2].rightPointer=bst_tree[i][j+1];
-        //         bst_tree[i][j+1].parentPointer=bst_tree[i][j+2];
-        //         *lefttree=bst_tree[i][j+2];
-        //     }else if (key2<key1 && key1<key3){
-        //         bst_tree[i][j].parentPointer=bst_tree[i][j+1];
-        //         bst_tree[i][j+1].rightPointer=bst_tree[i][j];
-        //         // if(*lefttree.keyValue<key2){
-        //         //     *lefttree.parentPointer=bst_tree[i][j+1];
-        //         //     bst_tree[i][j+1].leftPointer=*lefttree;
-        //         //     *lefttree=bst_tree[i][j+1];
-        //         // }
-        //         //key3 useless
-        //     }else if (key2<key3 && key3<key1){
-
-        //     }else if (key3<key1 && key1<key2){
-        //         bst_tree[i][j].parentPointer=bst_tree[i][j+1];
-        //         bst_tree[i][j+1].leftPointer=bst_tree[i][j];
-        //         bst_tree[i][j+1].parentPointer=bst_tree[i][j+2];
-        //         bst_tree[i][j+2].rightPointer=bst_tree[i][j+1];
-
-        //     }else if(key3<key2 && key2<key1){
-
-        //     }
-        // }
+        makeTree(postTree[i], binaryTree[i]);
+        vector<int> preArr;
+        printPreorderTree(*binaryTree[i], preArr);
+        for(int j=0;j<preArr.size();j++)
+        {
+            outfile<<preArr[j]<<" ";
+        }
+        outfile<<endl;
     }
-
-
-    // for(int i=0; i<treeNum; i++){
-    //     for (int j=0; j<nodeNum[i];j++){
-    //         outfile<<postTree[i][j]<<" ";
-    //     }outfile<<endl;
-    // }
     infile.close();
     outfile.close();
 }
+
 // https://hackmd.io/@ndhu-programming-2021/BkZukG4jK
