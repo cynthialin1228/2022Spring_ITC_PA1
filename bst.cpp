@@ -67,26 +67,13 @@ void makeTree(int postA[], int length, TreeNode root[],int mypointer, int& h){
         }
     return;
 }
-void printPreorderTree(TreeNode root[], int mypointer){
-
+void printPreorderTree(TreeNode root[], int mypointer, vector<int>& preT){
     cout<<root[mypointer].keyValue<<", ";
-    preT.push_back(root.keyValue);
-    if(root[mypointer].leftPointer != -1) printPreorderTree(root,root[mypointer].leftPointer);
-    if(root[mypointer].rightPointer != -1)printPreorderTree(root,root[mypointer].rightPointer);
-    // preT.push_back(root.keyValue);
-    // // cout<<root.keyValue<<endl;
-    // if(root.leftPointer!=NULL){
-    //     // cout<<"into leftchild"<<endl;
-    //     printPreorderTree(*root.leftPointer, preT);
-    //     // cout<<"out leftchild"<<endl;
-    // }
-    // if(root.rightPointer!=NULL){
-    //     // cout<<"into rightchild"<<endl;
-    //     printPreorderTree(*root.rightPointer, preT);
-    // }
-    // return;
+    preT.push_back(root[mypointer].keyValue);
+    if(root[mypointer].leftPointer != -1) printPreorderTree(root,root[mypointer].leftPointer, preT);
+    if(root[mypointer].rightPointer != -1)printPreorderTree(root,root[mypointer].rightPointer, preT);
+    return;
 }    
-
 int main(int argc, char *argv[]){
     ifstream infile; 
     infile.open(argv[1]);
@@ -130,24 +117,17 @@ int main(int argc, char *argv[]){
         int h = 0;
         makeTree(postTree[i], nodeNum[i], binaryTreeRoot[i],0, h);
     }
-    for(int i=0; i<treeNum; i++){
-        cout<<"binaryTreeRoot"<<&binaryTreeRoot[i]<<endl;
-        printPreorderTree(binaryTreeRoot[i], 0);
-    }
 
-    // for(int i=0; i<treeNum; i++){
-    //     vector<int> preArr;
-    //     cout<<i<<" preArr initialized"<<endl;
-    //     printPreorderTree(binaryTreeRoot[i]);
-    //     // preArr.push_back(binaryTreeRoot[i].keyValue);
-    //     // printPreorderTree(binaryTreeRoot[i].leftPointer, preArr);
-    //     // printPreorderTree(binaryTreeRoot[i].rightPointer, preArr);
-    //     for(int j=0;j<preArr.size();j++)
-    //     {
-    //         outfile<<preArr[j]<<" ";
-    //     }
-    //     outfile<<endl;
-    // }    
+    for(int i=0; i<treeNum; i++){
+        vector<int> preArr;
+        cout<<i<<" preArr initialized"<<endl;
+        printPreorderTree(binaryTreeRoot[i],0, preArr);
+        for(int j=0;j<preArr.size();j++)
+        {
+            outfile<<preArr[j]<<" ";
+        }
+        outfile<<endl;
+    }    
     infile.close();
     outfile.close();
 }
