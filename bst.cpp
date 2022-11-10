@@ -8,22 +8,21 @@ using namespace std;
 
 class TreeNode{
     public:
-        TreeNode *leftPointer;
-        TreeNode *rightPointer;
-        TreeNode *parentPointer;
+        int leftPointer, rightPointer, parentPointer, mypointer;
         int keyValue;
         TreeNode(){}
         ~TreeNode(){}
 };
 
-void makeTree(int postA[], int length, TreeNode& root){
-    root.keyValue=postA[length-1];
-    cout<<"node="<<root.keyValue<<", its address="<<&root<<endl;
+void makeTree(int postA[], int length, TreeNode root[],int mypointer, int& h){
+    root[mypointer].keyValue=postA[length-1];
+    h++;
+    cout<<"node="<<root[h].keyValue<<", its address="<<&root[h]<<endl;
     // cout<<endl<<"root= "<<root.keyValue<<"  ---->  ";
     if(length==1){
         // cout<<"I'm a leaf"<<endl;
-        root.leftPointer=NULL;
-        root.rightPointer=NULL;
+        root[mypointer].leftPointer=-1;
+        root[mypointer].rightPointer=-1;
         return;
     }
     int k=length-2;
@@ -41,13 +40,12 @@ void makeTree(int postA[], int length, TreeNode& root){
                 // cout<<rightTreeNodes[i]<<", ";
             }
             // copy(postA+k+1,postA+length-2,rightTreeNodes);
-            TreeNode rightChildRoot;
-            root.rightPointer = &rightChildRoot;
-            rightChildRoot.parentPointer = &root;
+            root[mypointer].rightPointer = h;
+            root[h].parentPointer = mypointer;
             // cout<<"rightChildRoot.parentPointer"<<rightChildRoot.parentPointer<<endl;
-            makeTree(rightTreeNodes, rightlength, rightChildRoot);
+            makeTree(rightTreeNodes, rightlength, root, h,h);
         }else{
-            root.rightPointer=NULL;
+            root[mypointer].rightPointer=-1;
             // cout<<"no right child"<<endl;
         }
 
@@ -59,27 +57,22 @@ void makeTree(int postA[], int length, TreeNode& root){
                 // cout<<leftTreeNodes[i]<<", ";
             }
             // copy(postA, postA+k, leftTreeNodes);
-            TreeNode leftChildRoot;
-            root.leftPointer = &leftChildRoot;
-            leftChildRoot.parentPointer = &root;
+            root[mypointer].leftPointer = h;
+            root[h].parentPointer = mypointer;
             // cout<<"leftChildRoot.parentPointer="<<leftChildRoot.parentPointer<<endl;
-            makeTree(leftTreeNodes, leftlength, leftChildRoot);
+            makeTree(leftTreeNodes, leftlength, root,h,h);
         }else{
-            root.leftPointer = NULL;
+            root[mypointer].leftPointer = -1;
             // cout<<"no left child"<<endl;
         }
     return;
 }
-void printPreorderTree(TreeNode& root){
-        cout<<root.keyValue<<" ";
-        cout<<&root<<"      ";
-        cout<<root.leftPointer<<"   ";
-        cout<<root.rightPointer<<"   "<<endl;
+void printPreorderTree(TreeNode root[], int mypointer){
 
-    // cout<<root.keyValue<<", ";
-    // preT.push_back(root.keyValue);
-    if(root.leftPointer != 0) printPreorderTree(*root.leftPointer);
-    if(root.rightPointer != 0)printPreorderTree(*root.rightPointer);
+    cout<<root[mypointer].keyValue<<", ";
+    preT.push_back(root.keyValue);
+    if(root[mypointer].leftPointer != -1) printPreorderTree(root,root[mypointer].leftPointer);
+    if(root[mypointer].rightPointer != -1)printPreorderTree(root,root[mypointer].rightPointer);
     // preT.push_back(root.keyValue);
     // // cout<<root.keyValue<<endl;
     // if(root.leftPointer!=NULL){
@@ -109,8 +102,8 @@ int main(int argc, char *argv[]){
     postTree = new int * [treeNum]; 
     // preTree = new int * [treeNum]; 
     // inorderTree = new int * [treeNum];
-    TreeNode *binaryTreeRoot;
-    binaryTreeRoot = new TreeNode [treeNum];
+    TreeNode **binaryTreeRoot;
+    binaryTreeRoot = new TreeNode * [treeNum];
     //TreeNode **bst_tree;
     //bst_tree = new TreeNode * [treeNum];
 
@@ -118,6 +111,7 @@ int main(int argc, char *argv[]){
     for(int i=0; i<treeNum; i++){
         infile>>nodeNum[i];
         postTree[i] = new int[nodeNum[i]];
+        binaryTreeRoot[i] = new TreeNode[nodeNum[i]];
         // preTree[i] = new int[nodeNum[i]];
         // inorderTree[i] = new int[nodeNum[i]];
         //bst_tree[i] = new TreeNode[nodeNum[i]];
@@ -130,13 +124,15 @@ int main(int argc, char *argv[]){
 
 
     for(int i=0; i<treeNum; i++){
-        binaryTreeRoot[i].parentPointer=NULL;
+        binaryTreeRoot[i][0].parentPointer=-1;
+        binaryTreeRoot[i][0].mypointer=0;
         // cout<<endl<<"makeTree"<<i<<endl;
-        makeTree(postTree[i], nodeNum[i], binaryTreeRoot[i]);
+        int h = 0;
+        makeTree(postTree[i], nodeNum[i], binaryTreeRoot[i],0, h);
     }
     for(int i=0; i<treeNum; i++){
         cout<<"binaryTreeRoot"<<&binaryTreeRoot[i]<<endl;
-        printPreorderTree(binaryTreeRoot[i]);
+        printPreorderTree(binaryTreeRoot[i], 0);
     }
 
     // for(int i=0; i<treeNum; i++){
