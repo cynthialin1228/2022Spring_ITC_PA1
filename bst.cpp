@@ -69,7 +69,6 @@ void printPreorderTree(TreeNode root[], int mypointer, vector<int>& preT){
 int getHeight(TreeNode root[], int length){
 	int maxHeight=0;
 	for(int i=0; i<length; i++){
-        cout<<root[i].keyValue<<", "<<root[i].nodeHeight<<", "<<root[i].parentPointer<<", "<<root[i].leftPointer<<", "<<root[i].rightPointer<<endl;
 		if(root[i].nodeHeight>maxHeight){
 			maxHeight = root[i].nodeHeight;
 		}
@@ -137,5 +136,3 @@ int main(int argc, char *argv[]){
     infile.close();
     outfile.close();
 }
-
-// https://hackmd.io/@ndhu-programming-2021/BkZukG4jK
