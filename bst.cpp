@@ -117,20 +117,20 @@ int main(int argc, char *argv[]){
     for(int i=0; i<treeNum; i++){
         vector<int> preArr;
         printPreorderTree(binaryTreeRoot[i],0, preArr);
-        for(int j=0;j<preArr.size();j++)
+        outfile<<preArr[0];
+        for(int j=1;j<preArr.size();j++)
         {
-            outfile<<preArr[j]<<" ";
+            outfile<<" "<<preArr[j];
         }
-        outfile<<endl;
     	int height = getHeight(binaryTreeRoot[i],nodeNum[i]);
-        outfile<<height<<endl;
+        outfile<<endl<<height<<endl;
         int maxValues[height];
         for(int j=0; j<height; j++){
-        	maxValues[j]=-1000;
+        	maxValues[j]=-1000; //since input >=-500
 		}
         getMaxValues(binaryTreeRoot[i],nodeNum[i], maxValues);
         for(int j=0; j<height; j++){
-        	outfile<<maxValues[j]<<" "<<endl;
+        	outfile<<maxValues[j]<<endl;
 		}
     }    
     
