@@ -17,7 +17,6 @@ class TreeNode{
 void makeTree(int postA[], int length, TreeNode root[],int mypointer, int& h){
     root[mypointer].keyValue=postA[length-1];
     h++;
-    cout<<"node="<<root[h].keyValue<<", its address="<<&root[h]<<endl;
     if(length==1){
         root[mypointer].leftPointer=-1;
         root[mypointer].rightPointer=-1;
@@ -58,7 +57,6 @@ void makeTree(int postA[], int length, TreeNode root[],int mypointer, int& h){
     return;
 }
 void printPreorderTree(TreeNode root[], int mypointer, vector<int>& preT){
-    cout<<root[mypointer].keyValue<<", ";
     preT.push_back(root[mypointer].keyValue);
     if(root[mypointer].leftPointer != -1){
     	printPreorderTree(root,root[mypointer].leftPointer, preT);
@@ -118,7 +116,6 @@ int main(int argc, char *argv[]){
 
     for(int i=0; i<treeNum; i++){
         vector<int> preArr;
-        cout<<i<<" preArr initialized"<<endl;
         printPreorderTree(binaryTreeRoot[i],0, preArr);
         for(int j=0;j<preArr.size();j++)
         {
@@ -131,7 +128,7 @@ int main(int argc, char *argv[]){
         for(int j=0; j<height; j++){
         	maxValues[j]=-1000;
 		}
-        getMaxValues(binaryTreeRoot[i], maxValues);
+        getMaxValues(binaryTreeRoot[i],nodeNum[i], maxValues);
         for(int j=0; j<height; j++){
         	outfile<<maxValues[j]<<" "<<endl;
 		}
