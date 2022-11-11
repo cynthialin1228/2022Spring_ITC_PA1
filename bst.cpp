@@ -8,7 +8,7 @@ using namespace std;
 
 class TreeNode{
     public:
-        int leftPointer, rightPointer, parentPointer, mypointer, nodeHeight;
+        int leftPointer, rightPointer, parentPointer, nodeHeight;
         int keyValue;
         TreeNode(){}
         ~TreeNode(){}
@@ -69,6 +69,7 @@ void printPreorderTree(TreeNode root[], int mypointer, vector<int>& preT){
 int getHeight(TreeNode root[], int length){
 	int maxHeight=0;
 	for(int i=0; i<length; i++){
+        cout<<root[i].keyValue<<", "<<root[i].nodeHeight<<", "<<root[i].parentPointer<<", "<<root[i].leftPointer<<", "<<root[i].rightPointer<<endl;
 		if(root[i].nodeHeight>maxHeight){
 			maxHeight = root[i].nodeHeight;
 		}
@@ -108,7 +109,6 @@ int main(int argc, char *argv[]){
 
     for(int i=0; i<treeNum; i++){
         binaryTreeRoot[i][0].parentPointer=-1;
-        binaryTreeRoot[i][0].mypointer=0;
 		binaryTreeRoot[i][0].nodeHeight=1;
         int h = 0;
         makeTree(postTree[i], nodeNum[i], binaryTreeRoot[i],0, h);
